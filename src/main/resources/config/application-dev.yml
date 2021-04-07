@@ -31,17 +31,10 @@ spring:
     serialization:
       indent-output: true
   datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:mem:smarthotel;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: smartHotel
-    password:
-    hikari:
-      poolName: Hikari
-      auto-commit: false
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
   h2:
     console:
-      # disable spring boot built-in h2-console since we start it manually with correct configuration
-      enabled: false
+      enabled: true
   jpa:
     database-platform: tech.jhipster.domain.util.FixedH2Dialect
   liquibase:
