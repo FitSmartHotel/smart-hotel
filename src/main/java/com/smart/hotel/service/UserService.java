@@ -1,18 +1,15 @@
 package com.smart.hotel.service;
 
 import com.smart.hotel.config.Constants;
-import com.smart.hotel.domain.Authority;
-import com.smart.hotel.domain.User;
+import com.smart.hotel.domain.AuthorityEntity;
+import com.smart.hotel.domain.UserEntity;
 import com.smart.hotel.repository.AuthorityRepository;
 import com.smart.hotel.repository.UserRepository;
 import com.smart.hotel.security.AuthoritiesConstants;
 import com.smart.hotel.security.SecurityUtils;
 import com.smart.hotel.service.dto.AdminUserDTO;
 import com.smart.hotel.service.dto.UserDTO;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -23,11 +20,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.security.RandomUtil;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * Service class for managing users.
  */
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
@@ -38,13 +44,7 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authorityRepository = authorityRepository;
-    }
-
-    public Optional<User> activateRegistration(String key) {
+    public Optional<UserEntity> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         return userRepository
             .findOneByActivationKey(key)
@@ -59,7 +59,7 @@ public class UserService {
             );
     }
 
-    public Optional<User> completePasswordReset(String newPassword, String key) {
+    public Optional<UserEntity> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userRepository
             .findOneByResetKey(key)
@@ -74,10 +74,10 @@ public class UserService {
             );
     }
 
-    public Optional<User> requestPasswordReset(String mail) {
+    public Optional<UserEntity> requestPasswordReset(String mail) {
         return userRepository
             .findOneByEmailIgnoreCase(mail)
-            .filter(User::isActivated)
+            .filter(UserEntity::isActivated)
             .map(
                 user -> {
                     user.setResetKey(RandomUtil.generateResetKey());
@@ -87,7 +87,7 @@ public class UserService {
             );
     }
 
-    public User registerUser(AdminUserDTO userDTO, String password) {
+    public UserEntity registerUser(AdminUserDTO userDTO, String password) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(
@@ -108,7 +108,7 @@ public class UserService {
                     }
                 }
             );
-        User newUser = new User();
+        UserEntity newUser = new UserEntity();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
@@ -124,7 +124,7 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-        Set<Authority> authorities = new HashSet<>();
+        Set<AuthorityEntity> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
@@ -132,7 +132,7 @@ public class UserService {
         return newUser;
     }
 
-    private boolean removeNonActivatedUser(User existingUser) {
+    private boolean removeNonActivatedUser(UserEntity existingUser) {
         if (existingUser.isActivated()) {
             return false;
         }
@@ -141,8 +141,8 @@ public class UserService {
         return true;
     }
 
-    public User createUser(AdminUserDTO userDTO) {
-        User user = new User();
+    public UserEntity createUser(AdminUserDTO userDTO) {
+        UserEntity user = new UserEntity();
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -161,7 +161,7 @@ public class UserService {
         user.setResetDate(Instant.now());
         user.setActivated(true);
         if (userDTO.getAuthorities() != null) {
-            Set<Authority> authorities = userDTO
+            Set<AuthorityEntity> authorities = userDTO
                 .getAuthorities()
                 .stream()
                 .map(authorityRepository::findById)
@@ -197,7 +197,7 @@ public class UserService {
                     user.setImageUrl(userDTO.getImageUrl());
                     user.setActivated(userDTO.isActivated());
                     user.setLangKey(userDTO.getLangKey());
-                    Set<Authority> managedAuthorities = user.getAuthorities();
+                    Set<AuthorityEntity> managedAuthorities = user.getAuthorities();
                     managedAuthorities.clear();
                     userDTO
                         .getAuthorities()
@@ -280,12 +280,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
+    public Optional<UserEntity> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneWithAuthoritiesByLogin(login);
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities() {
+    public Optional<UserEntity> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
@@ -312,6 +312,6 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public List<String> getAuthorities() {
-        return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
+        return authorityRepository.findAll().stream().map(AuthorityEntity::getName).collect(Collectors.toList());
     }
 }

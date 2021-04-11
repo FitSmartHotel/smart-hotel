@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <changeSet id="00000000000003" author="kovsharov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="numbers"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="numbers">
+
+            <column name="number" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="level" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="price" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="users_amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="door_locked" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="alarm_enabled" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="registered" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="user_id" type="bigint"/>
+
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="numbers"
+                                 constraintName="fk_numbers_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+
+    </changeSet>
+</databaseChangeLog>

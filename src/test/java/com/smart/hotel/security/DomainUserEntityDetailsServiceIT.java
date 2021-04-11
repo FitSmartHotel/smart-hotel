@@ -1,12 +1,8 @@
 package com.smart.hotel.security;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-
 import com.smart.hotel.IntegrationTest;
-import com.smart.hotel.domain.User;
+import com.smart.hotel.domain.UserEntity;
 import com.smart.hotel.repository.UserRepository;
-import java.util.Locale;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,12 +11,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Locale;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+
 /**
  * Integrations tests for {@link DomainUserDetailsService}.
  */
 @Transactional
 @IntegrationTest
-class DomainUserDetailsServiceIT {
+class DomainUserEntityDetailsServiceIT {
 
     private static final String USER_ONE_LOGIN = "test-user-one";
     private static final String USER_ONE_EMAIL = "test-user-one@localhost";
@@ -37,7 +38,7 @@ class DomainUserDetailsServiceIT {
 
     @BeforeEach
     public void init() {
-        User userOne = new User();
+        UserEntity userOne = new UserEntity();
         userOne.setLogin(USER_ONE_LOGIN);
         userOne.setPassword(RandomStringUtils.random(60));
         userOne.setActivated(true);
@@ -47,7 +48,7 @@ class DomainUserDetailsServiceIT {
         userOne.setLangKey("en");
         userRepository.save(userOne);
 
-        User userTwo = new User();
+        UserEntity userTwo = new UserEntity();
         userTwo.setLogin(USER_TWO_LOGIN);
         userTwo.setPassword(RandomStringUtils.random(60));
         userTwo.setActivated(true);
@@ -57,7 +58,7 @@ class DomainUserDetailsServiceIT {
         userTwo.setLangKey("en");
         userRepository.save(userTwo);
 
-        User userThree = new User();
+        UserEntity userThree = new UserEntity();
         userThree.setLogin(USER_THREE_LOGIN);
         userThree.setPassword(RandomStringUtils.random(60));
         userThree.setActivated(false);
