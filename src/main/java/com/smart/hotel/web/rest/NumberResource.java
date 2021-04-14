@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/numbers")
@@ -28,6 +29,18 @@ public class NumberResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<NumberDTO> getNumber(@PathVariable String number) {
         return ResponseUtil.wrapOrNotFound(numberService.getNumber(number));
+    }
+
+    @DeleteMapping("{number}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public void deleteNumber(@PathVariable String number) {
+        numberService.deleteNumber(number);
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public List<NumberDTO> getNumbers() {
+        return numberService.getNumbers();
     }
 
 }
