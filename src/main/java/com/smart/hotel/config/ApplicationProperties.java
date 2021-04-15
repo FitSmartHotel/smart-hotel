@@ -1,12 +1,20 @@
 package com.smart.hotel.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * Properties specific to Smart Hotel.
- * <p>
- * Properties are configured in the {@code application.yml} file.
- * See {@link tech.jhipster.config.JHipsterProperties} for a good example.
- */
+import javax.validation.constraints.NotNull;
+
+
+@Validated
+@Getter
+@Setter
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
-public class ApplicationProperties {}
+public class ApplicationProperties {
+
+    @NotNull
+    private String apiKey;
+
+}

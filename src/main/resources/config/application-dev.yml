@@ -53,16 +53,8 @@ spring:
 server:
   port: 9090
 
-# ===================================================================
-# JHipster specific properties
-#
-# Full reference is available at: https://www.jhipster.tech/common-application-properties/
-# ===================================================================
-
 jhipster:
-  # CORS is only enabled by default with the "dev" profile
   cors:
-    # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
     allowed-origins: 'http://localhost:8100,http://localhost:9000'
     allowed-methods: '*'
     allowed-headers: '*'
@@ -72,27 +64,18 @@ jhipster:
   security:
     authentication:
       jwt:
-        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
         base64-secret: OTBiMWJiZmNlZmI1ZGNjYzk4MmVlMzk0YmFmYjk1Njg5NzZlZDVhYTA2ZWM2ZjJhMzU1YzI2OGY1N2I1M2Y4ZDAwYmZhNDlmNWM3YzZmYjJkNTY2MjY3NTFmM2RjNjNmYzc4OWIwMjI5N2M0YTU5ZWU1ODM5MTBiZTViMTM4MGM=
-        # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
-  mail: # specific JHipster mail property, for standard properties see MailProperties
+  mail:
     base-url: http://127.0.0.1:9090
   logging:
-    use-json-format: false # By default, logs are not in Json format
-    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+    use-json-format: false
+    logstash:
       enabled: false
       host: localhost
       port: 5000
       queue-size: 512
-# ===================================================================
-# Application specific properties
-# Add your own application properties here, see the ApplicationProperties class
-# to have type-safe configuration, like in the JHipsterProperties above
-#
-# More documentation is available at:
-# https://www.jhipster.tech/common-application-properties/
-# ===================================================================
 
-# application:
+application:
+  api-key: test

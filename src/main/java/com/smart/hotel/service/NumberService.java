@@ -37,4 +37,9 @@ public class NumberService {
     public void deleteNumber(String number) {
         numberRepository.deleteByNumber(number);
     }
+
+    public void register(String number) {
+        numberRepository.findByNumber(number).ifPresentOrElse(n -> n.setRegistered(true),
+                () -> {throw new EntityNotFoundException(String.format("Number %s was not found", number));});
+    }
 }
