@@ -15,6 +15,7 @@ public class NumberMapper {
                 .usersAmount(0)
                 .doorLocked(true)
                 .alarmEnabled(false)
+                .locked(false)
                 .registered(false)
                 .build();
     }

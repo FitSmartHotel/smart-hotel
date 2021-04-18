@@ -36,6 +36,10 @@
                 <constraints nullable="false"/>
             </column>
 
+            <column name="locked" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+
             <column name="registered" type="boolean">
                 <constraints nullable="false"/>
             </column>

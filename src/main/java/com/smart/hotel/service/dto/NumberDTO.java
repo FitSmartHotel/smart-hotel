@@ -32,6 +32,8 @@ public class NumberDTO {
 
     private boolean alarmEnabled;
 
+    private boolean locked;
+
     private boolean registered;
 
     public NumberDTO(NumberEntity number) {
@@ -42,6 +44,7 @@ public class NumberDTO {
         doorLocked = number.isDoorLocked();
         alarmEnabled = number.isAlarmEnabled();
         registered = number.isRegistered();
+        locked = number.isLocked();
     }
 
     @Data

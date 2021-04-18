@@ -35,9 +35,11 @@ public class NumberEntity extends AbstractAuditingEntity {
     @Column(name = "registered", nullable = false)
     private boolean registered;
 
+    @Column(name = "locked", nullable = false)
+    private boolean locked;
+
     @ManyToOne
     public UserEntity user;
-
 
     @Override
     public boolean equals(Object o) {
