@@ -30,11 +30,10 @@ import tech.jhipster.config.JHipsterProperties;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
 @RequiredArgsConstructor
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
-
-    @Configuration
     @Order(1)
+    @Configuration
     public static class ApiConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
         @Autowired
@@ -85,25 +84,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         }
     }
 
-    @Configuration
     @Order(2)
+    @Configuration
+    @RequiredArgsConstructor
     public static class UserAuthenticationAdapter extends WebSecurityConfigurerAdapter {
 
-        @Autowired
-        private JHipsterProperties jHipsterProperties;
+        private final JHipsterProperties jHipsterProperties;
 
-        @Autowired
-        private TokenProvider tokenProvider;
+        private final TokenProvider tokenProvider;
 
-        @Autowired
-        private CorsFilter corsFilter;
+        private final CorsFilter corsFilter;
 
-        @Autowired
-        private SecurityProblemSupport problemSupport;
-
-        public UserAuthenticationAdapter() {
-            super(true);
-        }
+        private final SecurityProblemSupport problemSupport;
 
         @Bean
         public PasswordEncoder passwordEncoder() {
@@ -151,6 +143,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .httpBasic()
                     .and()
                     .apply(securityConfigurerAdapter());
+            // @formatter:on
         }
 
         private JWTConfigurer securityConfigurerAdapter() {
