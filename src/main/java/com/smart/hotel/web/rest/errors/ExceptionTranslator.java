@@ -115,7 +115,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleEmailAlreadyUsedException(
-        com.smart.hotel.service.EmailAlreadyUsedException ex,
+        com.smart.hotel.service.exceptions.EmailAlreadyUsedException ex,
         NativeWebRequest request
     ) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
@@ -128,7 +128,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleEntityNotFoundException(
-            com.smart.hotel.service.EntityNotFoundException ex,
+            com.smart.hotel.service.exceptions.EntityNotFoundException ex,
             NativeWebRequest request
     ) {
         return create(
@@ -139,8 +139,22 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     }
 
     @ExceptionHandler
+    public ResponseEntity<Problem> handleNumberAlreadyUsedException(
+            com.smart.hotel.service.exceptions.NumberAlreadyExistsException ex,
+            NativeWebRequest request
+    ) {
+        var problem = new EmailAlreadyUsedException();
+        return create(
+                problem,
+                request,
+                HeaderUtil.createFailureAlert(applicationName, false,
+                        problem.getEntityName(),
+                        problem.getErrorKey(), problem.getMessage()));
+    }
+
+    @ExceptionHandler
     public ResponseEntity<Problem> handleUsernameAlreadyUsedException(
-        com.smart.hotel.service.UsernameAlreadyUsedException ex,
+            com.smart.hotel.service.exceptions.UsernameAlreadyUsedException ex,
         NativeWebRequest request
     ) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
@@ -153,7 +167,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleInvalidPasswordException(
-        com.smart.hotel.service.InvalidPasswordException ex,
+        com.smart.hotel.service.exceptions.InvalidPasswordException ex,
         NativeWebRequest request
     ) {
         return create(new InvalidPasswordException(), request);

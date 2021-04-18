@@ -2,8 +2,9 @@ package com.smart.hotel.service;
 
 import com.smart.hotel.repository.NumberRepository;
 import com.smart.hotel.service.dto.NumberDTO;
+import com.smart.hotel.service.exceptions.EntityNotFoundException;
+import com.smart.hotel.service.exceptions.NumberAlreadyExistsException;
 import com.smart.hotel.service.mapper.NumberMapper;
-import com.smart.hotel.web.rest.errors.NumberAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

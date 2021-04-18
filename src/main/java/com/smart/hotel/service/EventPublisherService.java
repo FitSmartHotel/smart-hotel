@@ -4,6 +4,7 @@ import com.smart.hotel.repository.NumberRepository;
 import com.smart.hotel.service.dto.EventDTO;
 import com.smart.hotel.service.dto.sensors.DistanceSensorDTO;
 import com.smart.hotel.service.events.SensorEvent;
+import com.smart.hotel.service.exceptions.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

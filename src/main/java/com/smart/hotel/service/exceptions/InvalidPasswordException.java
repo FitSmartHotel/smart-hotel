@@ -1,4 +1,4 @@
-package com.smart.hotel.service;
+package com.smart.hotel.service.exceptions;
 
 public class InvalidPasswordException extends RuntimeException {
 
