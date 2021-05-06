@@ -41,6 +41,11 @@ public class NumberEntity extends AbstractAuditingEntity {
     @ManyToOne
     public UserEntity user;
 
+
+    public boolean isAssinged() {
+        return user != null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.security.RandomUtil;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
@@ -75,6 +76,11 @@ public class UserService {
                     return user;
                 }
             );
+    }
+
+    public UserEntity getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User %s was not found", id)));
     }
 
     public Optional<UserEntity> requestPasswordReset(String mail) {

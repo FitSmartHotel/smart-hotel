@@ -36,6 +36,10 @@ public class NumberDTO {
 
     private boolean registered;
 
+    private boolean isAssigned;
+
+    private String assignedUserLogin;
+
     public NumberDTO(NumberEntity number) {
         this.number = number.getNumber();
         level = number.getLevel();
@@ -45,6 +49,8 @@ public class NumberDTO {
         alarmEnabled = number.isAlarmEnabled();
         registered = number.isRegistered();
         locked = number.isLocked();
+        isAssigned = number.isAssinged();
+        assignedUserLogin = isAssigned ? number.getUser().getLogin() : null;
     }
 
     @Data
@@ -64,6 +70,18 @@ public class NumberDTO {
         @NotNull
         private BigDecimal price;
 
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class AssignUserDTO {
+
+        @PositiveOrZero
+        @NotNull
+        public Long userId;
     }
 
 }

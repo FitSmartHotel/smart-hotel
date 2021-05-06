@@ -43,4 +43,18 @@ public class NumberResource {
         return numberService.getNumbers();
     }
 
+
+    @PostMapping("{number}/assign")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public void assignUser(@PathVariable String number,
+                           @Valid @RequestBody NumberDTO.AssignUserDTO assignUserDTO) {
+        numberService.assingUser(number, assignUserDTO);
+    }
+
+    @PutMapping("{number}/unassing")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public void assignUser(@PathVariable String number) {
+        numberService.unassingUser(number);
+    }
+
 }
