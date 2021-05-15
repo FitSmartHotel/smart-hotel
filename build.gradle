@@ -221,7 +221,6 @@ dependencies {
     liquibaseRuntime sourceSets.main.compileClasspath
     implementation "org.springframework.boot:spring-boot-loader-tools"
     implementation "org.springframework.boot:spring-boot-starter-mail"
-    implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     testImplementation "org.testcontainers:postgresql"
@@ -229,7 +228,7 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
-    implementation "org.springframework.boot:spring-boot-starter-undertow"
+    implementation "org.springframework.boot:spring-boot-starter-jetty"
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
     implementation "org.zalando:problem-spring-web"
     implementation "org.springframework.security:spring-security-config"
@@ -244,9 +243,6 @@ dependencies {
         implementation "io.jsonwebtoken:jjwt-impl"
         implementation "io.jsonwebtoken:jjwt-jackson"
     }
-    implementation ("io.springfox:springfox-oas")
-    implementation ("io.springfox:springfox-swagger2")
-    implementation "io.springfox:springfox-bean-validators"
     implementation "org.postgresql:postgresql"
     liquibaseRuntime "org.postgresql:postgresql"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
@@ -261,6 +257,11 @@ dependencies {
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}"
     testImplementation "com.h2database:h2"
     liquibaseRuntime "com.h2database:h2"
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 

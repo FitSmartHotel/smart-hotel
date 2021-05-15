@@ -1,48 +1,25 @@
 package com.smart.hotel.service.dto;
 
-import com.smart.hotel.domain.User;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.smart.hotel.domain.UserEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/**
- * A DTO representing a user, with only the public attributes.
- */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
 
     private Long id;
 
     private String login;
 
-    public UserDTO() {
-        // Empty constructor needed for Jackson.
-    }
-
-    public UserDTO(User user) {
+    public UserDTO(UserEntity user) {
         this.id = user.getId();
-        // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-            "id='" + id + '\'' +
-            ", login='" + login + '\'' +
-            "}";
     }
 }

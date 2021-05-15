@@ -1,7 +1,7 @@
 package com.smart.hotel.web.rest;
 
 import com.smart.hotel.config.Constants;
-import com.smart.hotel.domain.User;
+import com.smart.hotel.domain.UserEntity;
 import com.smart.hotel.repository.UserRepository;
 import com.smart.hotel.security.AuthoritiesConstants;
 import com.smart.hotel.service.MailService;
@@ -10,12 +10,7 @@ import com.smart.hotel.service.dto.AdminUserDTO;
 import com.smart.hotel.web.rest.errors.BadRequestAlertException;
 import com.smart.hotel.web.rest.errors.EmailAlreadyUsedException;
 import com.smart.hotel.web.rest.errors.LoginAlreadyUsedException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-import java.util.Collections;
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,10 +27,19 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 /**
  * REST controller for managing users.
  * <p>
- * This class accesses the {@link User} entity, and needs to fetch its collection of authorities.
+ * This class accesses the {@link UserEntity} entity, and needs to fetch its collection of authorities.
  * <p>
  * For a normal use-case, it would be better to have an eager relationship between User and Authority,
  * and send everything to the client side: there would be no View Model and DTO, a lot less code, and an outer-join
@@ -58,6 +62,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/admin")
+@RequiredArgsConstructor
 public class UserResource {
 
     private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(
@@ -74,13 +79,6 @@ public class UserResource {
     private final UserRepository userRepository;
 
     private final MailService mailService;
-
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
-        this.userService = userService;
-        this.userRepository = userRepository;
-        this.mailService = mailService;
-    }
-
     /**
      * {@code POST  /admin/users}  : Creates a new user.
      * <p>
@@ -95,7 +93,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<User> createUser(@Valid @RequestBody AdminUserDTO userDTO) throws URISyntaxException {
+    public ResponseEntity<UserEntity> createUser(@Valid @RequestBody AdminUserDTO userDTO) throws URISyntaxException {
         log.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
@@ -106,7 +104,7 @@ public class UserResource {
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            User newUser = userService.createUser(userDTO);
+            UserEntity newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity
                 .created(new URI("/api/admin/users/" + newUser.getLogin()))
@@ -129,7 +127,7 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<AdminUserDTO> updateUser(@Valid @RequestBody AdminUserDTO userDTO) {
         log.debug("REST request to update User : {}", userDTO);
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<UserEntity> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }

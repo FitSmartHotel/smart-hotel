@@ -1,14 +1,5 @@
 package com.smart.hotel.web.rest.errors;
 
-import java.net.URI;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -21,16 +12,22 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.zalando.problem.DefaultProblem;
-import org.zalando.problem.Problem;
-import org.zalando.problem.ProblemBuilder;
-import org.zalando.problem.Status;
-import org.zalando.problem.StatusType;
+import org.zalando.problem.*;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.web.util.HeaderUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.
@@ -118,7 +115,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleEmailAlreadyUsedException(
-        com.smart.hotel.service.EmailAlreadyUsedException ex,
+        com.smart.hotel.service.exceptions.EmailAlreadyUsedException ex,
         NativeWebRequest request
     ) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
@@ -130,8 +127,34 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     }
 
     @ExceptionHandler
+    public ResponseEntity<Problem> handleEntityNotFoundException(
+            com.smart.hotel.service.exceptions.EntityNotFoundException ex,
+            NativeWebRequest request
+    ) {
+        return create(
+                Status.NOT_FOUND,
+                ex,
+                request
+        );
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleNumberAlreadyUsedException(
+            com.smart.hotel.service.exceptions.NumberAlreadyExistsException ex,
+            NativeWebRequest request
+    ) {
+        var problem = new EmailAlreadyUsedException();
+        return create(
+                problem,
+                request,
+                HeaderUtil.createFailureAlert(applicationName, false,
+                        problem.getEntityName(),
+                        problem.getErrorKey(), problem.getMessage()));
+    }
+
+    @ExceptionHandler
     public ResponseEntity<Problem> handleUsernameAlreadyUsedException(
-        com.smart.hotel.service.UsernameAlreadyUsedException ex,
+            com.smart.hotel.service.exceptions.UsernameAlreadyUsedException ex,
         NativeWebRequest request
     ) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
@@ -144,7 +167,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleInvalidPasswordException(
-        com.smart.hotel.service.InvalidPasswordException ex,
+        com.smart.hotel.service.exceptions.InvalidPasswordException ex,
         NativeWebRequest request
     ) {
         return create(new InvalidPasswordException(), request);

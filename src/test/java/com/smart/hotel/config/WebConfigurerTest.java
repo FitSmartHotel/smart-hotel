@@ -56,14 +56,6 @@ class WebConfigurerTest {
     }
 
     @Test
-    void shouldStartUpDevServletContext() throws ServletException {
-        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
-
-        assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
-        verify(servletContext).addServlet(eq("H2Console"), any(WebServlet.class));
-    }
-
-    @Test
     void shouldCorsFilterOnApiPath() throws Exception {
         props.getCors().setAllowedOrigins(Collections.singletonList("other.domain.com"));
         props.getCors().setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));

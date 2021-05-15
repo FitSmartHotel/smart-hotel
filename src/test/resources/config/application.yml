@@ -109,4 +109,8 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  api-key: test
+
+component-controller:
+  url: http://192.168.0.120:5000

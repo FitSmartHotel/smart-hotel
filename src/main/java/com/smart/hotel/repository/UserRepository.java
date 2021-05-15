@@ -1,35 +1,31 @@
 package com.smart.hotel.repository;
 
-import com.smart.hotel.domain.User;
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
+import com.smart.hotel.domain.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-/**
- * Spring Data JPA repository for the {@link User} entity.
- */
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findOneByActivationKey(String activationKey);
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 
-    List<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    Optional<UserEntity> findOneByActivationKey(String activationKey);
 
-    Optional<User> findOneByResetKey(String resetKey);
+    List<UserEntity> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
 
-    Optional<User> findOneByEmailIgnoreCase(String email);
+    Optional<UserEntity> findOneByResetKey(String resetKey);
 
-    Optional<User> findOneByLogin(String login);
+    Optional<UserEntity> findOneByEmailIgnoreCase(String email);
 
-    @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesByLogin(String login);
+    Optional<UserEntity> findOneByLogin(String login);
 
     @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
+    Optional<UserEntity> findOneWithAuthoritiesByLogin(String login);
 
-    Page<User> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+    @EntityGraph(attributePaths = "authorities")
+    Optional<UserEntity> findOneWithAuthoritiesByEmailIgnoreCase(String email);
+
+    Page<UserEntity> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
 }
