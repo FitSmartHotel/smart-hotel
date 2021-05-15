@@ -1,6 +1,7 @@
 package com.smart.hotel.service;
 
 import com.smart.hotel.repository.NumberRepository;
+import com.smart.hotel.security.SecurityUtils;
 import com.smart.hotel.service.dto.NumberDTO;
 import com.smart.hotel.service.exceptions.EntityNotFoundException;
 import com.smart.hotel.service.exceptions.NumberAlreadyExistsException;
@@ -61,5 +62,14 @@ public class NumberService {
     public void unassingUser(String number) {
         numberRepository.findByNumber(number)
                 .ifPresent(n -> n.setUser(null));
+    }
+
+    //todo check authorization
+    @Transactional(readOnly = true)
+    public List<NumberDTO> getNumberAssigned() {
+        return numberRepository.findByUserLogin(SecurityUtils.getCurrentUserLogin().get())
+                .stream()
+                .map(NumberDTO::new)
+                .collect(Collectors.toUnmodifiableList());
     }
 }

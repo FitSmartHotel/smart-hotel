@@ -1,4 +1,4 @@
-package com.smart.hotel.config;
+package com.smart.hotel.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;

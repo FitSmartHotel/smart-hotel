@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface NumberRepository extends JpaRepository<NumberEntity, String> {
@@ -20,4 +21,8 @@ public interface NumberRepository extends JpaRepository<NumberEntity, String> {
     @Modifying
     @Query("update NumberEntity n set n.usersAmount = n.usersAmount - 1 where n.number = :number")
     void decrementUsersAmount(@Param("number") String number);
+
+    List<NumberEntity> findByUserLogin(String userLogin);
+
+    Optional<NumberEntity> findByNumberAndUserLogin(String number, String userLogin);
 }

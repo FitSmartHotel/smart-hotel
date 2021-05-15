@@ -1,5 +1,6 @@
 package com.smart.hotel.config;
 
+import com.smart.hotel.config.properties.ApplicationProperties;
 import com.smart.hotel.security.AuthoritiesConstants;
 import com.smart.hotel.security.jwt.JWTConfigurer;
 import com.smart.hotel.security.jwt.TokenProvider;

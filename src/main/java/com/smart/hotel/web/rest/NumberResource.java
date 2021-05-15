@@ -37,7 +37,12 @@ public class NumberResource {
         numberService.deleteNumber(number);
     }
 
-    @GetMapping
+    @GetMapping("assigned")
+    public List<NumberDTO> getNumbersAssigned() {
+        return numberService.getNumberAssigned();
+    }
+
+    @GetMapping("admin")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<NumberDTO> getNumbers() {
         return numberService.getNumbers();
